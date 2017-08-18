@@ -17,9 +17,14 @@ class Customer
     SqlRunner.run(sql, [])
   end
 
+  def delete()
+    sql = "DELETE FROM customers WHERE id = $1"
+    SqlRunner.run(sql, [@id])
+  end
+
   def save()
     sql = "INSERT INTO customers (name, funds)
-    VALUES ($1, $2) RETURNING id;
+      VALUES ($1, $2) RETURNING id;
     "
     result = SqlRunner.run(sql,[@name, @funds])
     @id = result[0]["id"].to_i
@@ -33,6 +38,27 @@ class Customer
 
   def Customer.map_items(result)
     return result.map() {|row| Customer.new(row)}
+  end
+
+  def update()
+    sql = " UPDATE customers SET (name, funds)
+      = ($1, $2) WHERE id = $3;
+    "
+    SqlRunner.run(sql, [@name, @funds, @id])
+  end
+
+  def films()
+    sql = "SELECT films.* FROM films INNER JOIN tickets
+      ON tickets.film_id = films.id WHERE customer_id = $1
+    "
+    result = SqlRunner.run(sql, [@id])
+    return Film.map_items(result)
+  end
+
+  def ticket_count()
+    sql = " SELECT * FROM tickets WHERE customer_id = $1"
+    result = SqlRunner.run(sql, [@id])
+    return Ticket.map_items(result).count()
   end
 
 end

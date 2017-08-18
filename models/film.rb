@@ -16,6 +16,11 @@ class Film
     SqlRunner.run(sql, [])
   end
 
+  def delete()
+    sql = "DELETE FROM films WHERE id = $1"
+    SqlRunner.run(sql, [@id])
+  end
+
   def save()
     sql = "INSERT INTO films (title, price)
     VALUES ($1, $2) RETURNING id;
@@ -32,6 +37,21 @@ class Film
     sql = "SELECT * FROM films;"
     result = SqlRunner.run(sql, [])
     return films = Film.map_items(result)
+  end
+
+  def update()
+    sql = " UPDATE tickets SET (title, price)
+    = ($1, $2) WHERE id = $3;
+    "
+    SqlRunner.run(sql, [@title, @price, @id])
+  end
+
+  def customers()
+    sql = "SELECT customers.* FROM customers INNER JOIN tickets
+      ON tickets.customer_id = customers.id WHERE film_id = $1
+    "
+    result = SqlRunner.run(sql, [@id])
+    return Customer.map_items(result)
   end
 
 end

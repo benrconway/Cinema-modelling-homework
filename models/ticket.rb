@@ -16,6 +16,11 @@ class Ticket
     SqlRunner.run(sql, [])
   end
 
+  def delete()
+    sql = "DELETE FROM tickets WHERE id = $1"
+    SqlRunner.run(sql, [@id])
+  end
+
   def save()
     sql = "INSERT INTO tickets (customer_id, film_id)
     VALUES ($1, $2) RETURNING id;
@@ -34,5 +39,11 @@ class Ticket
     return tickets = ticket.map_items(result)
   end
 
+  def update()
+    sql = " UPDATE tickets SET (customer_id, film_id)
+    = ($1, $2) WHERE id = $3;
+    "
+    SqlRunner.run(sql, [@customer_id, @film_id, @id])
+  end
 
 end
