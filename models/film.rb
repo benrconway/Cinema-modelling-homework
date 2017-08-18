@@ -23,4 +23,15 @@ class Film
     result = SqlRunner.run(sql, [@title, @price])
     @id = result[0]["id"].to_i
   end
+
+  def Film.map_items(result)
+    return result.map() {|row| Film.new(row)}
+  end
+
+  def Film.all()
+    sql = "SELECT * FROM films;"
+    result = SqlRunner.run(sql, [])
+    return films = Film.map_items(result)
+  end
+
 end
