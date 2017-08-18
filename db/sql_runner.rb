@@ -12,7 +12,7 @@ class SqlRunner()
       result = db.exec_prepared("query", values)
     ensure
     db.close
-  end
+    end
   return result
   end
 
