@@ -61,14 +61,15 @@ class Customer
     return Ticket.map_items(result).count()
   end
 
-  def buy_ticket(film)
-    if @funds >= film.price
-      @funds -= film.price
+  def buy_ticket(screening)
+    if @funds >= screening.price && screening.attendance < 30
+      @funds -= screening.price
       self.update()
+      screening.attendance += 1
     else
       return "Sorry, your card was declined."
     end
-    return Ticket.new({"customer_id" => @id, "film_id" => film.id })
+    return Ticket.new({"customer_id" => @id, "film_id" => screening.film_id })
   end
 
 

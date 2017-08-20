@@ -6,23 +6,23 @@ require_relative("../db/sql_runner.rb")
 
 class Screening
 
-  attr_accessor(:film_id, :tickets_bought, :start_time)
+  attr_accessor(:film_id, :attendance, :start_time, :price)
   attr_reader(:id)
 
   def initialize(screening_details)
     @id = screening_details["id"].to_i if screening_details["id"]
     @film_id = screening_details["film_id"]
-    @tickets_bought = screening_details["tickets_bought"]
+    @attendance = screening_details["attendance"]
     @start_time = screening_details["start_time"]
     @price = screening_details["price"]
   end
 
   def save()
     sql = "
-     INSERT INTO screenings (film_id, tickets_bought, start_time)
+     INSERT INTO screenings (film_id, attendance, start_time)
      VALUES ($1, $2, $3, $4) RETURNING id;
      "
-     values = [@film_id, @tickets_bought, @start_time, @price]
+     values = [@film_id, @attendance, @start_time, @price]
      result = SqlRunner.run(sql, values)
      @id = result[0]["id"].to_i
   end
@@ -43,9 +43,9 @@ class Screening
   end
 
   def update()
-    sql = "UPDATE screenings SET (film_id, tickets_bought, start_time)
+    sql = "UPDATE screenings SET (film_id, attendance, start_time)
     = ($1, $2, $3, $4) WHERE id = $5;"
-    values = [@film_id, @tickets_bought, @start_time, @price, @id]
+    values = [@film_id, @attendance, @start_time, @price, @id]
     SqlRunner.run(sql, values)
   end
 

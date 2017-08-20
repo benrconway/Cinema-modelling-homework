@@ -8,7 +8,6 @@ class Film
   def initialize(film_info)
     @id = film_info["id"].to_i if film_info["id"]
     @title = film_info["title"]
-    @price = film_info["price"]
   end
 
   def Film.delete_all()
@@ -22,10 +21,10 @@ class Film
   end
 
   def save()
-    sql = "INSERT INTO films (title, price)
-    VALUES ($1, $2) RETURNING id;
+    sql = "INSERT INTO films (title)
+    VALUES ($1) RETURNING id;
     "
-    result = SqlRunner.run(sql, [@title, @price])
+    result = SqlRunner.run(sql, [@title])
     @id = result[0]["id"].to_i
   end
 
@@ -41,9 +40,9 @@ class Film
 
   def update()
     sql = " UPDATE tickets SET (title, price)
-    = ($1, $2) WHERE id = $3;
+    = ($1) WHERE id = $2;
     "
-    SqlRunner.run(sql, [@title, @price, @id])
+    SqlRunner.run(sql, [@title, @id])
   end
 
   def customers()
