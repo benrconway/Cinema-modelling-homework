@@ -1,5 +1,5 @@
 require_relative("../db/sql_runner.rb")
-require("pry")
+require("pry-byebug")
 
 class Customer
 
@@ -60,5 +60,16 @@ class Customer
     result = SqlRunner.run(sql, [@id])
     return Ticket.map_items(result).count()
   end
+
+  def buy_ticket(film)
+    if @funds >= film.price
+      @funds -= film.price
+      self.update()
+    else
+      return "Sorry, your card was declined."
+    end
+    return Ticket.new({"customer_id" => @id, "film_id" => film.id })
+  end
+
 
 end
