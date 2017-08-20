@@ -62,12 +62,15 @@ class Customer
   end
 
   def buy_ticket(screening)
-    if @funds >= screening.price && screening.attendance < 30
+    if @funds < screening.price
+      return "Sorry, your card was declined."
+    elsif screening.attendance >= 30
+      return "Sorry, the screening is full."
+    else
       @funds -= screening.price
       self.update()
       screening.attendance += 1
-    else
-      return "Sorry, your card was declined."
+      screening.update()
     end
     return Ticket.new({"customer_id" => @id, "film_id" => screening.film_id })
   end

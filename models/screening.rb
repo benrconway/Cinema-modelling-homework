@@ -19,7 +19,7 @@ class Screening
 
   def save()
     sql = "
-     INSERT INTO screenings (film_id, attendance, start_time)
+     INSERT INTO screenings (film_id, attendance, start_time, price)
      VALUES ($1, $2, $3, $4) RETURNING id;
      "
      values = [@film_id, @attendance, @start_time, @price]
@@ -43,7 +43,7 @@ class Screening
   end
 
   def update()
-    sql = "UPDATE screenings SET (film_id, attendance, start_time)
+    sql = "UPDATE screenings SET (film_id, attendance, start_time, price)
     = ($1, $2, $3, $4) WHERE id = $5;"
     values = [@film_id, @attendance, @start_time, @price, @id]
     SqlRunner.run(sql, values)
@@ -54,6 +54,22 @@ class Screening
     SqlRunner.run(sql, [@id])
   end
 
+  def Screening.most_popular()
+    sql = "SELECT films.* FROM films INNER JOIN screenings
+    ON film_id = films.id ORDER BY attendance DESC;
+    "
+    result = SqlRunner.run(sql, [])
+    puts "#{result}"
+    return Film.map_items(result).first.title
+  end
 
+  def Screening.timetable
+    sql = "SELECT films.title, screenings.start_time FROM films
+    LEFT JOIN screenings ON films.id = screenings.film_id;"
+    result = SqlRunner.run(sql, [])
+    array =[]
+    result.each {|item| array.push(item)}
+    return array
+  end
 
 end

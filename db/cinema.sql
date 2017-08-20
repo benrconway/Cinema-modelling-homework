@@ -12,7 +12,7 @@ CREATE TABLE customers(
 
 CREATE TABLE films(
   id SERIAL PRIMARY KEY,
-  title VARCHAR(255),
+  title VARCHAR(255)
 
 );
 
@@ -26,6 +26,6 @@ CREATE TABLE screenings(
   id SERIAL PRIMARY KEY,
   film_id INT REFERENCES films(id) ON DELETE CASCADE,
   attendance INT,
-  start_time TIME
+  start_time TIME,
   price INT
 );

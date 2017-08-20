@@ -17,6 +17,13 @@ class CinemaTest < Minitest::Test
     assert_equal("Sorry, your card was declined.", customer.buy_ticket(screening))
   end
 
+  def test_buying_function__session_full
+    screening = Screening.new({"id" => 1, "film_id"=>1, "price" => 15, "start_time" => "15:50", "attendance"=> 2})
+    customer = Customer.new({"name" => "Harry Hopopotamus", "funds" => 50000})
+    30.times{customer.buy_ticket(screening)}
+    assert_equal("Sorry, the screening is full.", customer.buy_ticket(screening))
+  end
+
   def test_buy_function__pass
     customer1 = Customer.new({"name" => "Dr Worm", "funds" => 1_000})
     screening = Screening.new({"id" => 1, "film_id"=>1, "price" => 15, "start_time" => "15:50", "attendance"=> 2})
