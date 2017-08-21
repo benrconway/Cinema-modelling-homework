@@ -44,6 +44,7 @@ class Customer
     sql = " UPDATE customers SET (name, funds)
       = ($1, $2) WHERE id = $3;
     "
+    #can also be SET name = $1, funds = $2 WHERE id = $3;
     SqlRunner.run(sql, [@name, @funds, @id])
   end
 
@@ -74,6 +75,14 @@ class Customer
     end
     return Ticket.new({"customer_id" => @id, "film_id" => screening.film_id })
   end
+# Saving the ticket to the database should be done in the buy_ticket function
+# this would take out the issue of returning the value to end user and
+# and also maybe deal with ruby checking constraints which can be placed in
+# in the database now to throw errors.
 
+
+# you can save the ticket to the database which will then provide the
+# unique identifier and then it can be updated retrieved without saving
+#all the unique variables to be playing with. something to mess with.
 
 end
